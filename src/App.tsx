@@ -38,15 +38,9 @@ export default function App() {
 
   const canReveal = stage === "console" && consoleFinished;
 
-  const handleReveal = () => {
-    if (canReveal) {
-      setStage("reveal");
-    }
-  };
-
   return (
     <div
-      onClick={handleReveal}
+      onClick={() => canReveal && setStage("reveal")}
       className={`relative min-h-screen w-full flex items-center justify-center bg-[#050505] ${
         canReveal ? "cursor-pointer" : ""
       }`}
@@ -60,10 +54,10 @@ export default function App() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, scale: 1.05 }}
-            className="w-full max-w-2xl p-8 font-mono text-sm md:text-base text-white/80"
+            className="w-full max-w-2xl p-8 font-mono text-sm text-white/80"
           >
-            <div className="space-y-2">
-              <div className="flex gap-2 text-pink-soft/60">
+            <div className="space-y-3">
+              <div className="flex gap-2 text-pink-400/60">
                 <span>[system]</span>
                 <Typewriter
                   text="Initializing heart.PROTOCOL_v2.0..."
@@ -89,10 +83,10 @@ export default function App() {
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="pt-8 flex flex-col items-start gap-6"
+                  className="pt-8 flex flex-col gap-6"
                 >
                   <p className="text-white/40 italic">
-                    {">"} One encrypted package found for you.
+                    {"->"} One encrypted package found for you.
                   </p>
 
                   <button
@@ -100,16 +94,10 @@ export default function App() {
                       e.stopPropagation();
                       setStage("reveal");
                     }}
-                    className="flex items-center gap-3 px-6 py-3 border border-pink-500/30 bg-pink-500/5 hover:bg-pink-500/10 text-pink-300 transition-all duration-300"
+                    className="px-6 py-3 border border-pink-500/30 bg-pink-500/5 hover:bg-pink-500/10 text-pink-300 transition"
                   >
-                    <span className="font-mono tracking-widest uppercase text-xs">
-                      Decrypt Message
-                    </span>
+                    Decrypt Message
                   </button>
-
-                  <p className="text-[10px] text-white/20 animate-pulse">
-                    (or just click anywhere)
-                  </p>
                 </motion.div>
               )}
             </div>
@@ -119,37 +107,39 @@ export default function App() {
             key="reveal"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="relative w-full h-screen flex items-center justify-center overflow-hidden"
+            className="relative w-full h-screen overflow-hidden"
           >
             <TextHeart />
 
+            {/* LEFT SIDE PANEL (DECRYPTED moved here) */}
             <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 2, duration: 1 }}
-              className="z-20 text-center"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 1 }}
+              className="absolute left-6 top-1/2 -translate-y-1/2 text-[10px] font-mono text-white/20 space-y-1"
             >
-              <h2 className="text-pink-500 font-mono text-xl tracking-[0.3em] uppercase mb-2">
-                Decrypted
-              </h2>
+              <div className="text-pink-400/40">decrypted</div>
+              <div className="text-white/10">heart signal active</div>
+            </motion.div>
 
-              <div className="w-12 h-px bg-pink-500/30 mx-auto mb-8" />
-
+            {/* BOTTOM RIGHT SYSTEM CONTROL */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 2 }}
+              className="absolute bottom-6 right-6 text-[10px] font-mono text-white/20 text-right space-y-1"
+            >
               <button
                 onClick={() => setStage("console")}
-                className="text-white/30 hover:text-white/70 transition text-[10px] uppercase tracking-widest"
+                className="text-white/30 hover:text-white/70 transition"
               >
-                Re-encrypt
+                re-encrypt
               </button>
             </motion.div>
 
-            <div className="absolute top-8 left-8 text-[10px] font-mono text-white/10">
-              <div>status: active</div>
-              <div>type: emotion</div>
-            </div>
-
-            <div className="absolute bottom-8 right-8 text-[10px] font-mono text-white/10">
-              heart_protocol // running
+            {/* TOP LEFT STATUS */}
+            <div className="absolute top-6 left-6 text-[10px] font-mono text-white/10">
+              <div>heart_protocol // running</div>
             </div>
           </motion.div>
         )}
